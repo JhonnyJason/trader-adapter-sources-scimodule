@@ -1,24 +1,24 @@
 
 scimodule = {name: "scimodule"}
+############################################################
+log = (arg) ->
+    if allModules.debugmodule.modulesToDebug["scimodule"]?  then console.log "[scimodule]: " + arg
+    return
 
+############################################################
 #region node_modules
 require('systemd')
 express = require('express')
 bodyParser = require('body-parser')
 #endregion
 
-#log Switch
-log = (arg) ->
-    if allModules.debugmodule.modulesToDebug["scimodule"]?  then console.log "[scimodule]: " + arg
-    return
-
-#region internal variables
+############################################################
+#region internalProperties
 cfg = null
 
 app = null
 #endregion
 
-##initialization function  -> is automatically being called!  ONLY RELY ON DOM AND VARIABLES!! NO PLUGINS NO OHTER INITIALIZATIONS!!
 scimodule.initialize = () ->
     log "scimodule.initialize"
     cfg = allModules.configmodule
@@ -28,22 +28,24 @@ scimodule.initialize = () ->
     app.use bodyParser.json()
 
 #region internal functions
-onAction = (req, res) ->
-    log "onAction"
-    log "onAction - TODO implement!"
+onCancelOrders = (req, res) ->
+    log "onCancelOrders"
+    log "onCancelOrders - TODO implement!"
     res.send("Not implemented yet!")
+    return
 
-onOtherAction = (req, res) ->
-    log "onOtherAction"
-    log "onOtherAction - TODO implement!"
+onSetOrders = (req, res) ->
+    log "onSetOrders"
+    log "onSetOrders - TODO implement!"
     res.send("Not implemented yet!")
+    return
 
 #################################################################
 attachSCIFunctions = ->
     log "attachSCIFunctions"
 
-    app.post "/action", onAction
-    app.post "/otherAction", onOtherAction
+    app.post "/cancelOrders", onCancelOrders
+    app.post "/setOrders", onSetOrders
 
 listenForRequests = ->
     log "listenForRequests"
