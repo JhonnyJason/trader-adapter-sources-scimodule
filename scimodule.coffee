@@ -15,29 +15,64 @@ bodyParser = require('body-parser')
 ############################################################
 #region internalProperties
 cfg = null
+auth = null
+task = null
 
 app = null
 #endregion
 
+############################################################
 scimodule.initialize = () ->
     log "scimodule.initialize"
     cfg = allModules.configmodule
-    
+    auth = allModules.authmodule
+    task = allModules.taskmodule
+
     app = express()
     app.use bodyParser.urlencoded(extended: false)
     app.use bodyParser.json()
+    return
 
-#region internal functions
+############################################################
+#region internalFunctions
 onCancelOrders = (req, res) ->
     log "onCancelOrders"
-    log "onCancelOrders - TODO implement!"
-    res.send("Not implemented yet!")
+    try
+        orders = req.body.orders
+        message = JSON.stringify(orders)
+        signature = req.body.signature
+        auth.authenticate(message, signature)
+
+        tasks = orders.map((el) -> {type:"cancelOrder", order:el})
+        task.addTasks(tasks)
+        
+        response = {}
+        response.ok = true
+        response.message = "You are awesome!"
+        res.send(response)
+    catch err
+        log err
+        res.sendStatus(403)
     return
 
 onSetOrders = (req, res) ->
     log "onSetOrders"
-    log "onSetOrders - TODO implement!"
-    res.send("Not implemented yet!")
+    try
+        orders = req.body.orders
+        message = JSON.stringify(orders)
+        signature = req.body.signature
+        auth.authenticate(message, signature)
+
+        tasks = orders.map((el) -> {type:"setOrder", order:el})
+        task.addTasks(tasks)
+        
+        response = {}
+        response.ok = true
+        response.message = "You are awesome!"
+        res.send(response)
+    catch err
+        log err
+        res.sendStatus(403)
     return
 
 #################################################################
@@ -59,7 +94,8 @@ listenForRequests = ->
 #endregion
 
 
-#region exposed functions
+############################################################
+#region exposedFunctions
 scimodule.prepareAndExpose = ->
     log "scimodule.prepareAndExpose"
     attachSCIFunctions()
