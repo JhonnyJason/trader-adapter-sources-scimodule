@@ -42,6 +42,7 @@ onCancelOrders = (req, res) ->
         message = JSON.stringify(orders)
         signature = req.body.signature
         auth.authenticate(message, signature)
+        # throw "not completely implemented!"
 
         tasks = orders.map((el) -> {type:"cancelOrder", order:el})
         task.addTasks(tasks)
@@ -52,18 +53,22 @@ onCancelOrders = (req, res) ->
         res.send(response)
     catch err
         log err
-        res.sendStatus(403)
+        response = {}
+        response.ok = false
+        response.message = 'You are the fucking piece of shit!'
+        res.status(403).send(response)
     return
 
-onSetOrders = (req, res) ->
-    log "onSetOrders"
+onPlaceOrders = (req, res) ->
+    log "onPlaceOrders"
     try
         orders = req.body.orders
         message = JSON.stringify(orders)
         signature = req.body.signature
         auth.authenticate(message, signature)
+        # throw "not completely implemented!"
 
-        tasks = orders.map((el) -> {type:"setOrder", order:el})
+        tasks = orders.map((el) -> {type:"placeOrder", order:el})
         task.addTasks(tasks)
         
         response = {}
@@ -72,7 +77,10 @@ onSetOrders = (req, res) ->
         res.send(response)
     catch err
         log err
-        res.sendStatus(403)
+        response = {}
+        response.ok = false
+        response.message = 'You are the fucking piece of shit!'
+        res.status(403).send(response)
     return
 
 #################################################################
@@ -80,7 +88,9 @@ attachSCIFunctions = ->
     log "attachSCIFunctions"
 
     app.post "/cancelOrders", onCancelOrders
-    app.post "/setOrders", onSetOrders
+    app.post "/placeOrders", onPlaceOrders
+
+    return
 
 listenForRequests = ->
     log "listenForRequests"
