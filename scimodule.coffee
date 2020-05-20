@@ -41,8 +41,11 @@ onCancelOrders = (req, res) ->
         orders = req.body.orders
         message = JSON.stringify(orders)
         signature = req.body.signature
+
+        # log auth.createSignature(message)
+        # throw "don't do anything!"
+
         auth.authenticate(message, signature)
-        # throw "not completely implemented!"
 
         tasks = orders.map((el) -> {type:"cancelOrder", order:el})
         task.addTasks(tasks)
@@ -65,8 +68,11 @@ onPlaceOrders = (req, res) ->
         orders = req.body.orders
         message = JSON.stringify(orders)
         signature = req.body.signature
+
+        # log auth.createSignature(message)
+        # throw "don't do anything!"
+
         auth.authenticate(message, signature)
-        # throw "not completely implemented!"
 
         tasks = orders.map((el) -> {type:"placeOrder", order:el})
         task.addTasks(tasks)
